@@ -93,7 +93,7 @@
 <script src="js/bootstrap.min.js"></script>
 
 <script type="text/javascript" >
-    var wsServer = 'ws://192.168.0.168:9502';
+    var wsServer = 'ws://'+document.domain+':9502';
     var websocket = new WebSocket(wsServer);
     var approveImg = '';
     $('.bjy-cbh-send').click(function(){
