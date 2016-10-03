@@ -12,9 +12,6 @@
     <link rel="stylesheet" href="css/base.css" />
 </head>
 <body>
-
-
-
 <!-- 聊天框开始 -->
 <div class="modal" id="bjy-chat-modal">
     <div class="modal-dialog">
@@ -30,17 +27,24 @@
                 </div>
             </div>
             <div class="bjy-chat bjy-emoji-out3">
-                <div class="bjy-friend-list">
-                    <div class="bjy-fl-one bjy-flo-checked" data-edu="" data-avatar="images/user2.jpg" data-username="admin2" data-uid="89">
-                        <div class="bjy-flo-avatar">
-                            <img class="bjy-floa-img" src="./images/user2.jpg">
-                            <div class="bjy-flo-count " style="display: none;">0</div>
+
+                <div class="bjy-friend-list msg-friend" id="msg-friend">
+                    <div v-for="vo in friends" class="msg-frienabc">
+
+                        <div class="bjy-fl-one" @click="selected(vo.user_id)"
+                             :class="{active: activeName == vo.user_id}" id="f_user_{{vo.user_id}}"  data-edu="" data-avatar="{{vo.avatar}}" data-username="{{vo.nick}}" data-uid="{{vo.user_id}}">
+                            <div class="bjy-flo-avatar">
+                                <img class="bjy-floa-img" src="{{vo.avatar}}">
+                                <div class="bjy-flo-count " style="display: none;">0</div>
+                            </div>
+                            <ul class="bjy-flo-info" >
+                                <li class="bjy-flo-username">{{vo.nick}}<span class="bjy-flou-time">16:24:1</span></li>
+                                <li class="bjy-flo-school"></li>
+                            </ul>
                         </div>
-                        <ul class="bjy-flo-info">
-                            <li class="bjy-flo-username">admin2<span class="bjy-flou-time">16:24:1</span></li>
-                            <li class="bjy-flo-school"></li>
-                        </ul>
                     </div>
+
+
 
                 </div>
                 <div class="bjy-chat-box bjy-show-out">
@@ -127,7 +131,27 @@
             ]
         }
     });
+
     $(function () {
+        $.getJSON('./user.php',function (data) {
+            var friend = new Vue({
+                el: '#msg-friend',
+                data: {
+                    friends: data,
+                    activeName: ''
+            },
+                methods: {
+                  update:function (d) {
+                      console.log(d);
+                      $("#f_user_"+d).addClass('bjy-flo-checked');
+                  },
+                    selected: function(gameName) {
+                        this.activeName = gameName
+                    }
+                }
+        });
+
+        });
         var ws = new WebSocket("ws://localhost:9503");
         $(document).keydown(function (e) {
             if (e.which === 13&&e.ctrlKey) {
@@ -140,7 +164,10 @@
         ws.onmessage = function (event) {
             console.log(event.data);
             var data = JSON.parse(event.data);
-            msgvm.msgs.push(data);
+            msgvm.msgs.push(data['msg']);
+//            var jsonlist = JSON.stringify(data.list);
+//            console.log(jsonlist);
+//            msgvms.friends.push(jsonlist);
             $('.msg-content').animate({scrollTop:$(".msg-content").get(0).scrollHeight},'slow');  //滚动条自动到底部
             $('.bjy-cb-history').scrollTop(100000000);
         };
@@ -150,6 +177,11 @@
                 ws.send(content);
                 $(".bjy-show-box").empty();
             }
+        });
+        $(".msg-frienabc").click(function () {
+            alert(1);
+            $(".bjy-fl-one").addClass('bjy-flo-checked');
+
         });
         $('#bjy-chat-modal').modal({backdrop: 'static', keyboard: false});
     });

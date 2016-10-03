@@ -400,6 +400,7 @@ img {
 #bjy-chat-modal .modal-dialog .modal-content .bjy-chat .bjy-friend-list .bjy-flo-checked {
   background: #fff;
 }
+.msg-frienabc .active{background: #fff;}
 #bjy-chat-modal .modal-dialog .modal-content .bjy-chat .bjy-chat-box {
   width: 490px;
   height: 525px;

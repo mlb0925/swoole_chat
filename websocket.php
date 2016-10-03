@@ -12,12 +12,9 @@ $serv->on('Open', function($server, $req) {
 $_SESSION['id'] =20;
 $serv->on('Message', function($server, $frame) {
     echo "message: " . $frame->data . "\r\n";
-  //  $server->push($frame->fd, json_encode(["hello", "world"]));
-    //var_dump($server->connections);
-
     foreach ($server->connections as $fd) {
         file_put_contents('1.txt',$fd);
-        $data = [
+        $data['msg'] = [
           'body'=>$frame->data,  
           'nick'=>'张三',  
           'avatar'=> $fd%2?'./images/user1.jpg':'./images/user2.jpg',
