@@ -195,7 +195,8 @@ if(count($user)==0) {
         });
 
         });
-        var ws = new WebSocket("ws://localhost:9503");
+        var wsServer = 'ws://'+document.domain+':9503';
+        var ws = new WebSocket(wsServer);
         $(document).keydown(function (e) {
             if (e.which === 13&&e.ctrlKey) {
                 $('.bjy-cbh-send').trigger('click');
